@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ProjectDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CId" />
+          </Key>
+          <Property Name="CId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Purchase">
+          <Key>
+            <PropertyRef Name="PurId" />
+          </Key>
+          <Property Name="PurId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductID" Type="varchar" MaxLength="50" />
+          <Property Name="PName" Type="varchar" MaxLength="50" />
+          <Property Name="Price" Type="money" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="DOP" Type="date" />
+          <Property Name="Picture" Type="varchar(max)" />
+          <Property Name="CId" Type="int" />
+        </EntityType>
+        <EntityType Name="Register">
+          <Key>
+            <PropertyRef Name="RegId" />
+          </Key>
+          <Property Name="RegId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RUName" Type="varchar" MaxLength="50" />
+          <Property Name="RUEmail" Type="varchar" MaxLength="50" />
+          <Property Name="RUPassword" Type="varchar" MaxLength="50" />
+          <Property Name="RUConfirmPassword" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblRole">
+          <Key>
+            <PropertyRef Name="rId" />
+          </Key>
+          <Property Name="rId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="uId" />
+          </Key>
+          <Property Name="uId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="uEmail" Type="varchar" MaxLength="50" />
+          <Property Name="uName" Type="varchar" MaxLength="50" />
+          <Property Name="uPass" Type="varchar" MaxLength="50" />
+          <Property Name="rId" Type="int" />
+        </EntityType>
+        <Association Name="FK_Purchase_ToTable">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Purchase" Type="Self.Purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CId" />
+            </Principal>
+            <Dependent Role="Purchase">
+              <PropertyRef Name="CId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUser_ToTable">
+          <End Role="tblRole" Type="Self.tblRole" Multiplicity="0..1" />
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRole">
+              <PropertyRef Name="rId" />
+            </Principal>
+            <Dependent Role="tblUser">
+              <PropertyRef Name="rId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProjectDatabaseModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Purchase" EntityType="Self.Purchase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Register" EntityType="Self.Register" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblRole" EntityType="Self.tblRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUser" EntityType="Self.tblUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Purchase_ToTable" Association="Self.FK_Purchase_ToTable">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Purchase" EntitySet="Purchase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUser_ToTable" Association="Self.FK_tblUser_ToTable">
+            <End Role="tblRole" EntitySet="tblRole" />
+            <End Role="tblUser" EntitySet="tblUser" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProjectDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CId" />
+          </Key>
+          <Property Name="CId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Purchases" Relationship="Self.FK_Purchase_ToTable" FromRole="Category" ToRole="Purchase" />
+        </EntityType>
+        <EntityType Name="Purchase">
+          <Key>
+            <PropertyRef Name="PurId" />
+          </Key>
+          <Property Name="PurId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="DOP" Type="DateTime" Precision="0" />
+          <Property Name="Picture" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CId" Type="Int32" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Purchase_ToTable" FromRole="Purchase" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="Register">
+          <Key>
+            <PropertyRef Name="RegId" />
+          </Key>
+          <Property Name="RegId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RUName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RUEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RUPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RUConfirmPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tblRole">
+          <Key>
+            <PropertyRef Name="rId" />
+          </Key>
+          <Property Name="rId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblUsers" Relationship="Self.FK_tblUser_ToTable" FromRole="tblRole" ToRole="tblUser" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="uId" />
+          </Key>
+          <Property Name="uId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="uEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="uName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="uPass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="rId" Type="Int32" />
+          <NavigationProperty Name="tblRole" Relationship="Self.FK_tblUser_ToTable" FromRole="tblUser" ToRole="tblRole" />
+        </EntityType>
+        <Association Name="FK_Purchase_ToTable">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Purchase" Type="Self.Purchase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CId" />
+            </Principal>
+            <Dependent Role="Purchase">
+              <PropertyRef Name="CId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUser_ToTable">
+          <End Role="tblRole" Type="Self.tblRole" Multiplicity="0..1" />
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblRole">
+              <PropertyRef Name="rId" />
+            </Principal>
+            <Dependent Role="tblUser">
+              <PropertyRef Name="rId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProjectDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Purchases" EntityType="Self.Purchase" />
+          <EntitySet Name="Registers" EntityType="Self.Register" />
+          <EntitySet Name="tblRoles" EntityType="Self.tblRole" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
+          <AssociationSet Name="FK_Purchase_ToTable" Association="Self.FK_Purchase_ToTable">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Purchase" EntitySet="Purchases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUser_ToTable" Association="Self.FK_tblUser_ToTable">
+            <End Role="tblRole" EntitySet="tblRoles" />
+            <End Role="tblUser" EntitySet="tblUsers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ProjectDatabaseModelStoreContainer" CdmEntityContainer="ProjectDatabaseEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="ProjectDatabaseModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="CId" ColumnName="CId" />
+                <ScalarProperty Name="CName" ColumnName="CName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Purchases">
+            <EntityTypeMapping TypeName="ProjectDatabaseModel.Purchase">
+              <MappingFragment StoreEntitySet="Purchase">
+                <ScalarProperty Name="PurId" ColumnName="PurId" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="PName" ColumnName="PName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="DOP" ColumnName="DOP" />
+                <ScalarProperty Name="Picture" ColumnName="Picture" />
+                <ScalarProperty Name="CId" ColumnName="CId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registers">
+            <EntityTypeMapping TypeName="ProjectDatabaseModel.Register">
+              <MappingFragment StoreEntitySet="Register">
+                <ScalarProperty Name="RegId" ColumnName="RegId" />
+                <ScalarProperty Name="RUName" ColumnName="RUName" />
+                <ScalarProperty Name="RUEmail" ColumnName="RUEmail" />
+                <ScalarProperty Name="RUPassword" ColumnName="RUPassword" />
+                <ScalarProperty Name="RUConfirmPassword" ColumnName="RUConfirmPassword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblRoles">
+            <EntityTypeMapping TypeName="ProjectDatabaseModel.tblRole">
+              <MappingFragment StoreEntitySet="tblRole">
+                <ScalarProperty Name="rId" ColumnName="rId" />
+                <ScalarProperty Name="rName" ColumnName="rName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="ProjectDatabaseModel.tblUser">
+              <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="uId" ColumnName="uId" />
+                <ScalarProperty Name="uEmail" ColumnName="uEmail" />
+                <ScalarProperty Name="uName" ColumnName="uName" />
+                <ScalarProperty Name="uPass" ColumnName="uPass" />
+                <ScalarProperty Name="rId" ColumnName="rId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

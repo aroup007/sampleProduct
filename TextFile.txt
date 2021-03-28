@@ -1,0 +1,53 @@
+﻿
+
+CREATE TABLE [dbo].[Category] (
+    [CId]   INT          IDENTITY (1, 1) NOT NULL,
+    [CName] VARCHAR (50) NULL,
+    PRIMARY KEY CLUSTERED ([CId] ASC)
+);
+Go
+
+
+
+CREATE TABLE [dbo].[Purchase] (
+    [PurId]     INT           IDENTITY (1, 1) NOT NULL,
+    [ProductID] VARCHAR (50)  NULL,
+    [PName]     VARCHAR (50)  NULL,
+    [Price]     MONEY         NULL,
+    [Quantity]  INT           NULL,
+    [DOP]       DATE          NULL,
+    [Picture]   VARCHAR (MAX) NULL,
+    [CId]       INT           NULL,
+    PRIMARY KEY CLUSTERED ([PurId] ASC),
+    CONSTRAINT [FK_Purchase_ToTable] FOREIGN KEY ([CId]) REFERENCES [dbo].[Category] ([CId])
+);
+Go
+
+CREATE TABLE [dbo].[Register] (
+    [RegId]             INT          IDENTITY (1, 1) NOT NULL,
+    [RUName]            VARCHAR (50) NULL,
+    [RUEmail]           VARCHAR (50) NULL,
+    [RUPassword]        VARCHAR (50) NULL,
+    [RUConfirmPassword] VARCHAR (50) NULL,
+    PRIMARY KEY CLUSTERED ([RegId] ASC)
+);
+Go
+
+CREATE TABLE [dbo].[tblRole]
+(
+	[rId] INT NOT NULL Identity PRIMARY KEY, 
+    [rName] VARCHAR(50) NULL
+);
+Go
+
+CREATE TABLE [dbo].[tblUser] (
+    [uId]    INT          IDENTITY (1, 1) NOT NULL,
+    [uEmail] VARCHAR (50) NULL,
+    [uName]  VARCHAR (50) NULL,
+    [uPass]  VARCHAR (50) NULL,
+    [rId]    INT          NULL,
+    PRIMARY KEY CLUSTERED ([uId] ASC),
+    UNIQUE NONCLUSTERED ([uEmail] ASC),
+    CONSTRAINT [FK_tblUser_ToTable] FOREIGN KEY ([rId]) REFERENCES [dbo].[tblRole] ([rId])
+);
+Go
